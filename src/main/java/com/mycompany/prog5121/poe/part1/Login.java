@@ -1,13 +1,19 @@
+
 package com.mycompany.prog5121.poe.part1;
 
 import java.util.Objects;
 
+ 
+/**
+ *
+ * @author tinas
+ */
 
 
     public class Login {
 
              private String firstName;
-             private String lastName;
+                 private String lastName;
              private String username;
          private String password;
          private String cellPhone;

@@ -1,5 +1,10 @@
 package com.mycompany.prog5121.poe.part1;
 
+ 
+/**
+ *
+ * @author tinas
+ */
 import java.util.Scanner;
 
 public class Prog5121PoePart1 {
