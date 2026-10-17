@@ -6,7 +6,6 @@
  *
  * @author tinas
  */
-
 package com.mycompany.prog5121.poe.part1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
