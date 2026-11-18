@@ -1,152 +1,70 @@
-
-
 package com.mycompany.prog5121.poe.part1;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-
-public class MessageTest
-
-        {
-
-    private Message message;
+public class MessageTest {
 
     @BeforeEach
-    
-    public void setUp()
-    
-        {
-            
-            
-      // Uses the fixed-ID constructor so results are predictable
-            
-        message = new Message
-                
-        ("0012345678", "+27718693002",
-        "Hi Mike, can you join us for dinner tonight?", 0);
-        
-    }
-
-    // ---------- checkMessageID ----------
-    
-    
-  @Test
-    public void testCheckMessageIDNotMoreThanTenCharacters() 
-    
-              {
-        assertTrue(Message.checkMessageID
-                  ("0012345678"));
-                                          }
-
-    @Test
-    public void testCheckMessageIDMoreThanTenCharacters()
-    {
-        assertFalse(Message.checkMessageID
-                   ("00123456789"));
-    }
-
-    // ---------- checkRecipientCell (assertEquals) ----------
-  
-    @Test
-    public void testCheckRecipientCellCorrectlyFormatted() {
-        assertEquals
-                
-        ("Cell phone number successfully captured.",
-  Message.checkRecipientCell
-        ("+27718693002"));
-        
-                                          }
-
-                     // My Test data 08575975889
-    
-    @Test
-    public void testCheckRecipientCellIncorrectlyFormatted() 
-            
-                             {
-        assertEquals
-     ("Cell phone number is incorrectly formatted or does "
-    + "not contain an international code.",
-                
-           Message.checkRecipientCell
-     ("08575975889"));
-                             }
-
-                    // ---------- checkMessageLength (assertEquals) ----------
-    
-    
-    @Test
-    public void testMessageWithinTwoHundredFiftyCharacters() {
-        String shortMessage = "Hi Mike, can you join us for dinner tonight?";
-        assertEquals
-                   ("Message ready to send.",
-                Message.checkMessageLength(shortMessage));
-                              }
-
-    @Test
-    public void testMessageExceedsTwoHundredFiftyCharacters()
-   
-                        {
-        String longMessage = "a".repeat(260);
-        assertEquals
-                  ("Message exceeds 250 characters by 10; please reduce "
-      + "the size.", Message.checkMessageLength(longMessage));
-                        }
-
-            package com.mycompany.prog5121.poe.part1; // ---------- createMessageHash ----------
-    
-    
-    @Test
-    public void testCreateMessageHashFormat() 
-                    
-                {
-        
-        assertEquals
-                    ("00:0:HITONIGHT", message.createMessageHash());
-    }
-
-              // ---------- sentMessage ----------
-    @Test
-            public void testSentMessageSend() 
-            
-                    {
-        assertEquals
-                    ("Message successfully sent.", message.sentMessage(1));
-                                     }
-
-    @Test
-    public void testSentMessageDisregard() 
-    
-    {
-        assertEquals
-                 
-                    ("Press 0 to delete the message.",
-                      message.sentMessage(2));
+    public void setUp() {
+        // Initialize test data required by Rubric Table 3
+        List<Message> testData = List.of(
+            new Message("MSG001", "Developer", "+27834557896", "Did you get the cake?", "Sent", "HASH001"),
+            new Message("MSG002", "Developer", "+27838884567", "Where are you? You are late! I have asked you to be on time.", "Stored", "HASH002"),
+            new Message("MSG003", "Developer", "+27834484567", "Yohoooo, I am at your gate.", "Disregard", "HASH003"),
+            new Message("0838884567", "Developer", "0838884567", "It is dinner time !", "Sent", "HASH004"),
+            new Message("MSG005", "Developer", "+27838884567", "Ok, I am leaving without you.", "Stored", "HASH005")
+        );
+        MessageManager.populateArrays(testData);
     }
 
     @Test
-    public void testSentMessageStore()
-                    
-    {
-        assertEquals
-                    ("Message successfully stored.",
-                message.sentMessage(3));
-                         }
+    public void testSentMessagesArrayCorrectlyPopulated() {
+        List<String> expectedSent = List.of("Did you get the cake?", "It is dinner time !");
+        assertEquals(expectedSent, MessageManager.sentMessages);
+    }
 
-            // ---------- returnTotalMessages ----------
-   
-    
- @Test
-    public void testReturnTotalMessagesAccumulates()
-                      {
-              int before = Message.returnTotalMessages();
-        message.sentMessage(1);
-        assertEquals(before + 1, Message.returnTotalMessages());
-             
-                      }
-            }
+    @Test
+    public void testDisplayLongestMessage() {
+        String expectedLongest = "Where are you? You are late! I have asked you to be on time.";
+        assertEquals(expectedLongest, MessageManager.getLongestMessage());
+    }
+
+    @Test
+    public void testSearchForMessageID() {
+        String result = MessageManager.searchByMessageId("0838884567");
+        assertTrue(result.contains("0838884567"));
+        assertTrue(result.contains("It is dinner time !"));
+    }
+
+    @Test
+    public void testSearchAllMessagesByRecipient() {
+        List<String> results = MessageManager.searchByRecipient("+27838884567");
+        assertEquals(2, results.size());
+        assertTrue(results.contains("Where are you? You are late! I have asked you to be on time."));
+        assertTrue(results.contains("Ok, I am leaving without you."));
+    }
+
+    @Test
+    public void testDeleteMessageUsingHash() {
+        String deleteResponse = MessageManager.deleteMessageByHash("HASH002");
+        assertEquals("Message: \"Where are you? You are late! I have asked you to be on time.\" successfully deleted.", deleteResponse);
+
+        // Assert message no longer exists
+        for (Message msg : MessageManager.allMessages) {
+            assertNotEquals("HASH002", msg.getMessageHash());
+        }
+    }
+
+    @Test
+    public void testDisplayReport() {
+        String report = MessageManager.displayReport();
+        assertNotNull(report);
+        assertTrue(report.contains("HASH001"));
+        assertTrue(report.contains("+27834557896"));
+        assertTrue(report.contains("Did you get the cake?"));
+    }
+}

@@ -1,0 +1,10 @@
+[
+  {
+    "messageId": "MSG005",
+    "sender": "Developer",
+    "recipient": "+27838884567",
+    "messageText": "Ok, I am leaving without you.",
+    "flag": "Stored",
+    "messageHash": "HASH005"
+  }
+]

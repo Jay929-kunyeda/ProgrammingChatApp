@@ -14,19 +14,21 @@ public class Prog5121PoePart1 {
         System.out.println("======================================");
 
         
-        // ==================== PART 1: REGISTRATION ====================
+     // ==================== PART 1 REGISTRATION
         
         System.out.println
+                            
                 ("\n--- REGISTRATION ---");
-        System.out.print
+                  System.out.print
                 ("Enter first name: ");
         String firstName = scanner.nextLine();
-        System.out.print
+       
+            System.out.print
                 ("Enter last name: ");
         String lastName = scanner.nextLine();
 
         String username;
-        while (true) 
+                         while (true) 
                      {
             System.out.print
                        ("Enter username (must contain '_' and be max "
@@ -47,7 +49,7 @@ public class Prog5121PoePart1 {
 
         
         String password;
-        while (true) {
+        while (true)             {
             System.out.print
         ("Enter password (min 8 characters, capital, "
                     + "number, special character): ");
@@ -72,6 +74,7 @@ public class Prog5121PoePart1 {
         ("Enter South African cell phone number "
                     + "(e.g. +27838968976): ");
             
+       
             cellPhoneNumber = scanner.nextLine();
                  if (login.checkCellPhoneNumber(cellPhoneNumber)) {
                 System.out.println
@@ -80,56 +83,71 @@ public class Prog5121PoePart1 {
             }   else {
                 System.out.println
         ("Cell phone number incorrectly formatted "
-                        + "or does not contain international code.");
-            }
+         + "or does not contain international code.");
+          
+                    }
              }
 
         // names + details all handed to the Login object
         String registrationMessage = login.registerUser(firstName, lastName,
                 username, password, cellPhoneNumber);
-        System.out.println("\n" + registrationMessage);
+        System.out.println
+        ("\n" + registrationMessage);
 
-        // ==================== PART 1: LOGIN ====================
-        System.out.println("\n--- LOGIN ---");
-        System.out.print("Enter username: ");
+        // PART 1: LOGIN 
+        System.out.println
+                ("\n--- LOGIN ---");
+        System.out.print
+        
+                ("Enter username: ");
         String loginUsername = scanner.nextLine();
-        System.out.print("Enter password: ");
+        System.out.print
+                ("Enter password: ");
         String loginPassword = scanner.nextLine();
 
         String loginStatus = login.returnLoginStatus(loginUsername,
                 loginPassword, firstName, lastName);
         System.out.println(loginStatus);
+        
 
-        // ==================== PART 2: QUICKCHAT ====================
+        //  PART 2: QUICKCHAT 
+        
         // Messages may only be sent once the user has logged in
-        if (loginStatus.startsWith("Welcome")) {
-            System.out.println("\nWelcome to QuickChat.");
+        
+        
+        if (loginStatus.startsWith
+                    ("Welcome")) {
+            System.out.println
+                ("\nWelcome to QuickChat.");
             runQuickChat(scanner);
-        }
+                     }
 
         scanner.close();
-    }
+                        }
 
     /**
      * This will run the QuickChat numeric menu until the user selects quit.
      */
     private static void runQuickChat(Scanner scanner)
         {
-        System.out.print("How many messages do you wish to enter? ");
-            int numMessages = readInt(scanner);
-                 int entered = 0;
-             boolean quit = false;
+        System.out.print
 
-                 while (!quit) {
+                ("How many messages do you wish to enter? ");
+        int numMessages = readInt(scanner);
+        int entered = 0;
+                  boolean quit = false;
+
+                 while (!quit) 
+                 {
             System.out.println
-        ("\nPlease choose an option:");
+              ("\nPlease choose an option:");
             System.out.println
         ("1) Send Messages");
             System.out.println
-        ("2) Show recently sent messages");
+                  ("2) Show recently sent messages");
             System.out.println
         ("3) Quit");
-            System.out.print
+                   System.out.print
         ("Enter choice: ");
                 int option = readInt(scanner);
 
@@ -138,7 +156,8 @@ public class Prog5121PoePart1 {
                 case 1:
                     if (entered >= numMessages) {
                         System.out.println
-        ("You may only enter "
+       
+            ("You may only enter "
           + numMessages + " message(s).");
             break;
                     }
@@ -279,4 +298,66 @@ public class Prog5121PoePart1 {
             }
         }
     }
+    
+    public static void storedMessagesMenu() {
+    boolean back = false;
+    while (!back) {
+        String subMenu = "=== STORED MESSAGES MENU ===\n"
+                + "a. Display sender and recipient of all stored messages\n"
+                + "b. Display the longest stored message\n"
+                + "c. Search for a message ID\n"
+                + "d. Search all messages for a recipient\n"
+                + "e. Delete a message using message hash\n"
+                + "f. Display report of all messages\n"
+                + "g. Back to Main Menu\n\n"
+                + "Enter your choice (a - g):";
+
+        String choice = javax.swing.JOptionPane.showInputDialog(null, subMenu);
+        if (choice == null || choice.trim().equalsIgnoreCase("g")) {
+            back = true;
+            continue;
+        }
+
+        switch (choice.trim().toLowerCase()) {
+            case "a":
+                javax.swing.JOptionPane.showMessageDialog(null, MessageManager.displayStoredSendersAndRecipients());
+                break;
+            case "b":
+                javax.swing.JOptionPane.showMessageDialog(null, "Longest Message:\n\"" + MessageManager.getLongestMessage() + "\"");
+                break;
+            case "c":
+                String id = javax.swing.JOptionPane.showInputDialog(null, "Enter Message ID to search:");
+                if (id != null && !id.trim().isEmpty()) {
+                    javax.swing.JOptionPane.showMessageDialog(null, MessageManager.searchByMessageId(id.trim()));
+                }
+                break;
+            case "d":
+                String recipient = javax.swing.JOptionPane.showInputDialog(null, "Enter Recipient Number:");
+                if (recipient != null && !recipient.trim().isEmpty()) {
+                    java.util.List<String> results = MessageManager.searchByRecipient(recipient.trim());
+                    if (results.isEmpty()) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "No messages found for: " + recipient);
+                    } else {
+                        StringBuilder sb = new StringBuilder("Messages for " + recipient + ":\n\n");
+                        for (String msg : results) {
+                            sb.append("• \"").append(msg).append("\"\n");
+                        }
+                        javax.swing.JOptionPane.showMessageDialog(null, sb.toString());
+                    }
+                }
+                break;
+            case "e":
+                String hash = javax.swing.JOptionPane.showInputDialog(null, "Enter Message Hash to delete:");
+                if (hash != null && !hash.trim().isEmpty()) {
+                    javax.swing.JOptionPane.showMessageDialog(null, MessageManager.deleteMessageByHash(hash.trim()));
+                }
+                break;
+            case "f":
+                javax.swing.JOptionPane.showMessageDialog(null, MessageManager.displayReport());
+                break;
+            default:
+                javax.swing.JOptionPane.showMessageDialog(null, "Invalid choice. Please select from a to g.");
+        }
+    }
+}
 }   
