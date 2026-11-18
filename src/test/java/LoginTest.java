@@ -6,7 +6,6 @@
  *
  * @author tinas
  */
-
 package com.mycompany.prog5121.poe.part1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,17 +19,20 @@ public class LoginTest
 
          private Login createValidUser()
                     {
-            return new Login(
+            return new Login
+        (
                   "Kyle",
-                        "Smith",
+                             "Smith",
                    "kyl_1",
-                       "Ch&&sec@ke99!",
-                      "+27838968976"
+                              "Ch&&sec@ke99!",
+                    "+27838968976"
                       );
                     }
 
     @Test
-                                  public void validUsernameShouldBeAccepted() 
+                     
+    
+    public void validUsernameShouldBeAccepted() 
                     {
                  Login user = createValidUser();
 
@@ -38,107 +40,131 @@ public class LoginTest
                    }
 
     @Test
-                                   public void invalidUsernameShouldBeRejected()
+                                   
+    
+    public void invalidUsernameShouldBeRejected()
                      {
-        Login user = createValidUser();
-         user.setUsername("kyle!!!!!!");
+          Login user = createValidUser();
+                      user.setUsername("kyle!!!!!!");
 
              assertFalse(user.checkUserName());
                       }
 
     @Test
-                                    public void validPasswordShouldBeAccepted()
-                     {
+                                
+    public void validPasswordShouldBeAccepted()
+          {
                      Login user = createValidUser();
 
                 assertTrue(user.checkPasswordComplexity());
                     }
 
     @Test
-                                    public void invalidPasswordShouldBeRejected() 
+                                 
+    public void invalidPasswordShouldBeRejected() 
                     {
-        Login user = createValidUser();
-                 user.setPassword("password");
+         Login user = createValidUser();
+                         user.setPassword("password");
 
                 assertFalse(user.checkPasswordComplexity());
                  }
 
     @Test
     
-                                    public void validCellPhoneShouldBeAccepted()
-    {
+                              
+    public void validCellPhoneShouldBeAccepted()
+           {
         Login user = createValidUser();
 
-                 assertTrue(user.checkCellPhoneNumber());
+                  assertTrue(user.checkCellPhoneNumber());
     }
 
              @Test
-                                    public void invalidCellPhoneShouldBeRejected() 
+                                 
+             public void invalidCellPhoneShouldBeRejected() 
                               {
+                                  
         Login user = createValidUser();
-                  user.setCellPhone("08966553");
+                         user.setCellPhone
+        ("08966553");
 
          assertFalse(user.checkCellPhoneNumber());
                                 }
 
     @Test
-                         public void validRegistrationShouldReturnSuccessMessage()
+                        
+    
+    public void validRegistrationShouldReturnSuccessMessage()
                                  {
-            Login user = createValidUser();
+          Login user = createValidUser();
 
              assertEquals(
-                "User has been successfully registered.",
+               
+                     "User has been successfully registered.",
+                     
                 user.registerUser()
-        );
-            }
+                                  );
+                                 }
 
     @Test
-                       public void successfulLoginShouldReturnTrue() {
+                    
+    public void successfulLoginShouldReturnTrue() {
                  Login user = createValidUser();
 
-                         assertTrue(user.loginUser(
-                       "kyl_1",
-                           "Ch&&sec@ke99!"
+                         assertTrue(user.loginUser
+        (
+                                  "kyl_1",
+                                      "Ch&&sec@ke99!"
         ));
     }
 
     @Test
-                         public void failedLoginShouldReturnFalse() {
+                        
+    
+    public void failedLoginShouldReturnFalse()
+                                                 {
                 Login user = createValidUser();
 
                 assertFalse(user.loginUser(
-                              "wrong_username",
-                "                         wrong_password"
+                "wrong_username",
+                " wrong_password"
         ));
-    }
+                                 }
 
          @Test
-                    public void successfulLoginShouldReturnCorrectMessage() {
+                   
+         public void successfulLoginShouldReturnCorrectMessage() {
                  Login user = createValidUser();
 
-                    boolean result = user.loginUser(
-                                              "kyl_1",
-                                                 "Ch&&sec@ke99!"
+                    boolean result = user.loginUser
+        (
+                               "kyl_1",
+                                "Ch&&sec@ke99!"
         );
 
         assertEquals(
                
-                "Welcome Kyle, Smith it is great to see you again.",
+            "Welcome Kyle, Smith it is great to see you again.",
                 user.returnLoginStatus(result)
-        );
-    }
+                        );
+                                      }
 
             @Test
-    public void failedLoginShouldReturnCorrectMessage() {
+    public void failedLoginShouldReturnCorrectMessage() 
+            
+            
+             {
         Login user = createValidUser();
 
         boolean result = user.loginUser(
-                "wrong_username",
-                "wrong_password"
-        );
+                        "wrong_username",
+                            "wrong_password"
+                  );
 
-        assertEquals(
-                "Username or password incorrect, please try again.",
+        
+        assertEquals
+        (
+             "Username or password incorrect, please try again.",
                 user.returnLoginStatus(result)
         );
     }
